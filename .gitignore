@@ -1,0 +1,59 @@
+#file types
+_ReSharper.*
+*.resharper
+*.DS_Store
+*.tlog
+*.vsp
+*.psess
+*.v11.suo
+*.user
+*.suo
+#*.Framework.XML
+
+#specific files
+RockJobSchedulerService.Xml
+web.[Cc]onnectionStrings.config
+desktop.ini
+Rock.XML
+pageviews.csv
+RockLogster.csv
+Quartz.xml
+StyleCop.Cache
+
+#specific folders
+[Oo]bj/
+RockWeb/Cache/*
+/Rock.NMI/bin/*
+/RockWeb/Bin/*
+/Rock.Migrations/bin/*
+/Rock.PayFlowPro/bin/*
+RockWeb/App_Data/PackageStaging
+/Rock.NMI/bin/*
+/RockWeb/Bin/*
+/scaffolding.config
+*.sln.GhostDoc.xml
+/packages/*
+
+Packages/*
+
+# javascript deps
+node_modules
+*.map
+#WC Stuff
+org.willowcreek.Duplicates/bin/
+org.willowcreek.Duplicates/obj/
+org.willowcreek.FileManagement/bin/
+org.willowcreek.FileManagement/obj/
+org.willowcreek.ProfileUpdate/bin/
+org.willowcreek.ProfileUpdate/obj/
+org.willowcreek.ProtectionApp/bin/
+org.willowcreek.ProtectionApp/obj/
+org.willowcreek.DevTool/bin/
+org.willowcreek.DevTool/obj/
+org.willowcreek/bin/
+org.willowcreek/obj/
+/RockWeb/{3ADB92E5-342B-458D-B779-369FC8A66CF6}/WebProject.lastcodeanalysissucceeded
+/RockWeb/{3ADB92E5-342B-458D-B779-369FC8A66CF6}
+/RockWeb/{3ADB92E5-342B-458D-B779-369FC8A66CF6}/CodeAnalysisLog.xml
+/RockWeb/{3ADB92E5-342B-458D-B779-369FC8A66CF6}/WebProject.lastcodeanalysissucceeded
+/RockWeb/{E43B5D55-BED0-4E74-BF97-9327F9A9D656}

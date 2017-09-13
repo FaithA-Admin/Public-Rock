@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BF221DD4-AF30-4A81-A572-A9F4F679025E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>org.willowcreek.ProtectionApp</RootNamespace>
+    <AssemblyName>org.willowcreek.ProtectionApp</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotLiquid">
+      <HintPath>..\DotLiquid\bin\Debug\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ImageResizer">
+      <HintPath>..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Quartz, Version=2.0.0.100, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\Quartz\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock">
+      <HintPath>..\Rock\bin\Debug\Rock.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock.Rest">
+      <HintPath>..\Rock.Rest\bin\Debug\Rock.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=5.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UAParser">
+      <HintPath>..\packages\UAParser.2.1.0.0\lib\net40-Client\UAParser.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\RockWeb\Bin\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\ProtectionAppContext.cs" />
+    <Compile Include="Data\ProtectionAppService.cs" />
+    <Compile Include="Jobs\ProtectionBatchReOrderBackgroundChecks.cs" />
+    <Compile Include="Jobs\ProtectionEvaluation.cs" />
+    <Compile Include="Jobs\ProtectionExpiration.cs" />
+    <Compile Include="Jobs\ProtectionReviewer.cs" />
+    <Compile Include="Logic\ProtectionEvaluator.cs" />
+    <Compile Include="Logic\ProtectionRerunBackgroundChecks.cs" />
+    <Compile Include="Logic\ProtectionRouter.cs" />
+    <Compile Include="Migrations\004_CreateReference.cs" />
+    <Compile Include="Migrations\003_CreateProtectionApp.cs" />
+    <Compile Include="Migrations\002_AddSystemData.cs" />
+    <Compile Include="Migrations\001_CreateDb.cs" />
+    <Compile Include="Migrations\005_AllowReferenceNulls.cs" />
+    <Compile Include="Model\AddictionStatus.cs" />
+    <Compile Include="Model\Archive.cs" />
+    <Compile Include="Model\ArchiveService.cs" />
+    <Compile Include="Model\LivedAtTimePeriod.cs" />
+    <Compile Include="Model\MaritalStatus.cs" />
+    <Compile Include="Model\MinistryDefaults.cs" />
+    <Compile Include="Model\MinistryDefaultsService.cs" />
+    <Compile Include="Model\NatureOfAssociation.cs" />
+    <Compile Include="Model\ProtectionAppWorkflowHelper.cs" />
+    <Compile Include="Model\Questionnaire.cs" />
+    <Compile Include="Model\QuestionnaireService.cs" />
+    <Compile Include="Model\Queue.cs" />
+    <Compile Include="Model\QueueService.cs" />
+    <Compile Include="Model\Reference.cs" />
+    <Compile Include="Model\ReferenceService.cs" />
+    <Compile Include="Model\UserDefaults.cs" />
+    <Compile Include="Model\UserDefaultsService.cs" />
+    <Compile Include="Model\WillowActiveVolunteers.cs" />
+    <Compile Include="Model\WillowActiveVolunteersInGroups.cs" />
+    <Compile Include="Model\WillowActiveVolunteersInGroupsService.cs" />
+    <Compile Include="Model\WillowActiveVolunteersService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rest\ArchivesController.cs" />
+    <Compile Include="Rest\MinistryDefaultsController.cs" />
+    <Compile Include="Rest\QuestionnaireController.cs" />
+    <Compile Include="Rest\QueuesController.cs" />
+    <Compile Include="Rest\ReferenceController.cs" />
+    <Compile Include="Rest\UserDefaultsController.cs" />
+    <Compile Include="Security\BackgroundCheck\ProtectMyMinistry.cs" />
+    <Compile Include="SystemGuid\DefinedType.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="Workflow\Action\BackgroundCheckBatchRequest.cs" />
+    <Compile Include="Workflow\Action\CheckProtectionReferenceCompletion.cs" />
+    <Compile Include="Workflow\Action\DeleteReferencePerson.cs" />
+    <Compile Include="Workflow\Action\EvaluateProtectionForPerson.cs" />
+    <Compile Include="Workflow\Action\InitializeProtectionForPerson.cs" />
+    <Compile Include="Workflow\Action\SetBackgroundCheckTypeFromPerson.cs" />
+    <Compile Include="Workflow\Action\LoadProtectionSummaryFromPerson.cs" />
+    <Compile Include="Workflow\Action\LoadProtectionUserDefaults.cs" />
+    <Compile Include="Workflow\Action\SaveProtectionUserDefaults.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\org.willowcreek.FileManagement\org.willowcreek.FileManagement.csproj">
+      <Project>{317f50fa-e265-45d0-b56d-b3145612775b}</Project>
+      <Name>org.willowcreek.FileManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\org.willowcreek\org.willowcreek.csproj">
+      <Project>{c139076a-4a29-4861-a6e8-00ebc7f00c34}</Project>
+      <Name>org.willowcreek</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

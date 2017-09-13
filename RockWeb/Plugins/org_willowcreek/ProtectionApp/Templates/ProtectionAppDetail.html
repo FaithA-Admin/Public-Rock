@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Protection Application for: {{Questionnaire.FullLegalName}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 10pt;
+        }
+
+        * {
+            vertical-align: top;
+        }
+
+        dl {
+            border: solid 1px #777;
+            border-radius: 7px;
+            margin: 3px;
+            padding: 3px;
+        }
+
+        dt {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+            dt:first-child {
+                margin-top: 0;
+            }
+
+        dd {
+        }
+    </style>
+</head>
+<body>
+    <h3>Protection Application for: {{Questionnaire.FullLegalName}}</h3>
+    <dl>
+        <dt>Submission Date</dt>
+        <dd>{{Questionnaire.SubmissionDate}}</dd>
+        <dt>Legal First Name</dt>
+        <dd>{{Questionnaire.LegalFirstName}}</dd>
+        <dt>Middle Name</dt>
+        <dd>{{Questionnaire.MiddleName}}</dd>
+        <dt>Last Name</dt>
+        <dd>{{Questionnaire.LastName}}</dd>
+        <dt>Nickname</dt>
+        <dd>{{Questionnaire.Nickname}}</dd>
+        <dt>If applicable: Previous name's (Including Maiden)</dt>
+        <dd>{{Questionnaire.MaidenName}}</dd>
+        <dt>Current Address Street</dt>
+        <dd>
+            {{Questionnaire.CurrentAddressStreet}}<br />
+            {{Questionnaire.CurrentAddressCity}}, {{Questionnaire.CurrentAddressState}} {{Questionnaire.CurrentAddressZip}}
+        </dd>
+        <dt>Have you lived at your current address for at least 12 months?</dt>
+        <dd>{{Questionnaire.TimeAtCurrentAddress}}</dd>
+        <dt>Previous Address Street</dt>
+        <dd>
+            {{Questionnaire.PreviousAddressStreet}}<br />
+            {{Questionnaire.PreviousAddressCity}}, {{Questionnaire.PreviousAddressState}} {{Questionnaire.PreviousAddressZip}}
+        </dd>
+        <dt>Home Phone</dt>
+        <dd>{{Questionnaire.HomePhone}}</dd>
+        <dt>Mobile Phone</dt>
+        <dd>{{Questionnaire.MobilePhone}}</dd>
+        <dt>Email Address</dt>
+        <dd>{{Questionnaire.EmailAddress}}</dd>
+        <dt>Date of Birth</dt>
+        <dd>{{Questionnaire.DateOfBirth}}</dd>
+        <dt>Gender</dt>
+        <dd>{{Questionnaire.Gender}}</dd>
+        <dt>Marital Status</dt>
+        <dd>{{Questionnaire.MaritalStatus}}</dd>
+        <dt>Do you have children?</dt>
+        <dd>{{Questionnaire.ChildrenCount}}</dd>
+        <dt>Children Ages</dt>
+        <dd>{{Questionnaire.ChildrenAges}}</dd>
+        <dt>Do you have a legal guardian?</dt>
+        <dd>{{Questionnaire.LegalGuardian}}</dd>
+        <dt>Do you attend Willow Creek Community Church?</dt>
+        <dd>{{Questionnaire.AttendWccc}}</dd>
+        <dt>When did you begin attending Willow Creek Community Church?</dt>
+        <dd>{{Questionnaire.StartWccc}}</dd>
+    </dl>
+    <dl>
+        <dt>Please indicate if you have any history of addiction to the following:</dt>
+        <dd>Pornography: {{Questionnaire.PornographyAddiction}}</dd>
+        <dd>Alcohol: {{Questionnaire.AlcoholAddiction}}</dd>
+        <dd>Drugs (illegal or prescription): {{Questionnaire.DrugAddiction}}</dd>
+        <dd>{{Questionnaire.AddictionExplain}}</dd>
+        <dt>Have you ever looked at pornography featuring minors?</dt>
+        <dd>{{Questionnaire.PornographyVulnerable}}</dd>
+        <dd>{{Questionnaire.PornographyVulnerableExplain}}</dd>
+        <dt>Have you ever been the subject of a DCFS investigation that was indicated (evidence was found to indicate abuse/neglect)?</dt>
+        <dd>{{Questionnaire.DcfsInvestigation}}</dd>
+        <dd>{{Questionnaire.DcfsInvestigationExplain}}</dd>
+        <dt>Have you ever had an order of protection filed against you?</dt>
+        <dd>{{Questionnaire.OrderOfProtection}}</dd>
+        <dd>{{Questionnaire.OrderOfProtectionExplain}}</dd>
+        <dt>Have you ever committed or been accused of any act involving the physical, sexual, OR emotional harm of another person (Examples include battery, rape, neglect, etc.)?</dt>
+        <dd>{{Questionnaire.CommittedOrAccused}}</dd>
+        <dd>{{Questionnaire.CommittedOrAccusedExplain}}</dd>
+        <dt>Have you ever had any kind or a relationship with a minor or vulnerable adult that has brought sexual gratification to yourself?</dt>
+        <dd>{{Questionnaire.RelationshipVulnerable}}</dd>
+        <dd>{{Questionnaire.RelationshipVulnerableExplain}}</dd>
+        <dt>Have you ever left or been asked to leave a role within an organization due to a concern regarding inappropriate conduct?</dt>
+        <dd>{{Questionnaire.AskedToLeave}}</dd>
+        <dd>{{Questionnaire.AskedToLeaveExplain}}</dd>
+    </dl>
+    <!--<dl>
+        <dt>Reference 1</dt>
+        <dd>{Questionnaire.Reference1Name}}</dd>
+        <dd>{Questionnaire.Reference1Email}}</dd>
+        <dd>{Questionnaire.Reference1NatureOfAssociation}}</dd>
+        <dt>Reference 2</dt>
+        <dd>{Questionnaire.Reference2Name}}</dd>
+        <dd>{Questionnaire.Reference2Email}}</dd>
+        <dd>{Questionnaire.Reference2NatureOfAssociation}}</dd>
+        <dt>Reference 3</dt>
+        <dd>{Questionnaire.Reference3Name}}</dd>
+        <dd>{Questionnaire.Reference3Email}}</dd>
+        <dd>{Questionnaire.Reference3NatureOfAssociation}}</dd>
+    </dl>-->
+    <div style="clear:both;">
+        <dl>
+            <dt>The information contained in this application is correct to the best of my knowledge.</dt>
+            <dd>{{Questionnaire.CorrectInfo}}</dd>
+            <dt>I authorize the release of the information contained in this application, on a confidential, need-to-know basis, to any ministry at Willow Creek Community Church in which I seek a position (volunteer or for compensation).</dt>
+            <dd>{{Questionnaire.AuthorizeRelease}}</dd>
+        </dl>
+        <dl>
+            <dt>
+                Background Check Authorization
+            </dt>
+            <dd class="row form-group note">
+                <div class="col-md-12" style="border: solid 1px #666; margin: 0 0 0 15px; padding: 5px; font: normal 9pt verdana; font-style: italic;">
+                    <p>
+                        By signing this agreement, I authorize Willow Creek Community Church and its authorized agents to obtain/ prepare consumer reports or investigative consumer reports about me.  I acknowledge receipt of a copy of A Summary of Your Rights under the Fair Credit Reporting Act (below) and verify that I have read it.
+                    </p>
+                    <p style="text-align: center;">
+                        Summary of Your Rights under the Fair Credit Reporting Act
+                    </p>
+                    <p>
+                        In connection with my Protection application for Willow Creek Community Church, I understand that a "consumer report" and/or
+                        "investigative consumer report", as defined by the Fair Credit Reporting Act, will be requested by Willow Creek for employment
+                        or volunteer purposes, whichever is applicable, from Protect My Ministry, Inc., ("Protect My Ministry"), a consumer reporting
+                        agency as defined by the Fair Credit Reporting Act.  These reports may include information as to my character, general reputation,
+                        personal characteristics or mode of living, whichever are applicable. They may involve interviews with sources such as my neighbors,
+                        friends or associates. The report may also contain information about me relating to my criminal history, credit history, driving
+                        and/or motor vehicle records, social security number verification, verification of education or employment history, worker's
+                        compensation (only after a conditional job offer) or other background checks. Such reports may be obtained at any time after
+                        receipt of this Disclosure and Authorization and if I am hired or serve as a volunteer, whichever is applicable, throughout the
+                        course of my employment or volunteer service, as permitted by law and unless revoked by me in writing.  I understand that I have
+                        the right, upon written request made within a reasonable amount time after the receipt of this notice, to request disclosure of the
+                        nature and scope of any investigative consumer report to Protect My Ministry, Inc., 14499 N. Dale Mabry Hwy., Suite 201 South,
+                        Tampa, FL 33618 or 1-800-319-5581.
+                    </p>
+                </div>
+                <div class="col-md-12" style="font: italic 9pt verdana; padding: 15px;">
+                    For information about Protect My Ministry's privacy practices,
+                    see <a href="http://www.protectmyministry.com" target="_blank">www.protectmyministry.com</a>.
+                </div>
+            </dd>
+            <dt>Applicant's Social Security Number</dt>
+            <dd>{{Questionnaire.ApplicantSsn}}</dd>
+            <dt>Signature</dt>
+            <dd>{{Questionnaire.Signature}}</dd>
+            <dt>Signature Date</dt>
+            <dd>{{Questionnaire.SignatureDate}}</dd>
+            <dt>Parent/Guardian Signature</dt>
+            <dd>{{Questionnaire.GuardianSignature}}</dd>
+            <dt>Guardian Signature Date</dt>
+            <dd>{{Questionnaire.GuardianSignatureDate}}</dd>
+        </dl>
+    </div>
+</body>
+</html>

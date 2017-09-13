@@ -1,0 +1,205 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="Rock.Web.UI.RockMasterPage" %>
+<%@ Register TagPrefix="WC" TagName="AccountButton" Src="~/Themes/WillowCreek/WebUserControls/AccountButton.ascx" %>
+<%@ Register TagPrefix="WC" TagName="LogoutButton" Src="~/Themes/WillowCreek/WebUserControls/LogoutButton.ascx" %>
+<%@ Import Namespace="System.Web.Optimization" %>
+<!DOCTYPE html>
+
+<script runat="server">
+
+        // keep code below to call base class init method
+
+        /// <summary>
+        /// Raises the <see cref="E:System.Web.UI.Control.Init" /> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs" /> object that contains the event data.</param>
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+        }
+</script>
+
+<html class="no-js">
+<head runat="server">
+
+    <meta charset="utf-8">
+    <title></title>
+
+    <script src="<%# ResolveRockUrl("~/Scripts/jquery-1.10.2.min.js" ) %>"></script>
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <asp:ContentPlaceHolder ID="css" runat="server" />
+    
+    <!-- Included CSS Files -->
+    <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" />
+    <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>" />
+    <link rel="stylesheet" href="<%# ResolveRockUrl("~/Styles/developer.css", true) %>" />
+
+    <script src="<%# ResolveRockUrl("~/Scripts/modernizr.js" ) %>"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="<%# ResolveRockUrl("~/Content/ExternalSite/Icons/favicon.ico", true) %>">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%# ResolveRockUrl("~/Content/ExternalSite/Icons/touch-icon-ipad-retina.png", true) %>">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%# ResolveRockUrl("~/Content/ExternalSite/Icons/touch-icon-iphone-retina.png", true) %>">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%# ResolveRockUrl("~/Content/ExternalSite/Icons/touch-icon-ipad.png", true) %>">
+    <link rel="apple-touch-icon-precomposed" href="<%# ResolveRockUrl("~/Content/ExternalSite/Icons/touch-icon-iphone.png", true) %>">
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Nunito:400,300,700" rel="stylesheet" type="text/css">
+</head>
+<body class="layout-default no-hero">
+    <form id="form1" runat="server">
+
+        <!-- Page Header -->
+
+        <nav class="nav--global">
+            <div class="main-nav--container">
+                <nav class="header--nav hide-for-medium columns medium-9">
+                    <ul class="menu">
+                        <li class="header--nav--item has_more" data-id="locations"><a href="/locations">Locations</a></li>
+                        <li class="header--nav--item" data-id="media"><a href="/media">Media</a></li>
+                        <li class="header--nav--item has_more" data-id="care"><a href="/care">Care</a></li>
+                        <li class="header--nav--item has_more" data-id="connect"><a href="/connect">Connect</a></li>
+                        <li class="header--nav--item" data-id="act"><a href="/act">Act</a></li>
+                        <li class="header--nav--item" data-id="give"><a href="/give">Give</a></li>
+                        <li class="header--nav--item has_more last" data-id="about"><a href="/about">About</a></li>
+                        <WC:AccountButton runat="server" />
+                        <li class="show-for-medium">
+                            <button class="close-button" aria-label="Close alert" type="button">
+                                <span class="fa fa-times" aria-hidden="true"></span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                <ul data-id="locations" class="main-nav--secondary menu">
+                    <li><a href="/south-barrington">South Barrington</a></li>
+                    <li><a href="">Casa de Luz</a></li>
+                    <li><a href="">Chicago</a></li>
+                    <li><a href="">Crystal Lake</a></li>
+                    <li><a href="">DuPage</a></li>
+                    <li><a href="">Huntley</a></li>
+                    <li><a href="">North Shore</a></li>
+                    <li class="show-for-medium">
+                        <button class="close-button" aria-label="Close alert" type="button">
+                            <span class="fa fa-times" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+                <ul data-id="care" class="main-nav--secondary menu">
+                    <li><a href="">Care Center</a></li>
+                    <li><a href="">Relational Resources</a></li>
+                    <li class="show-for-medium">
+                        <button class="close-button" aria-label="Close alert" type="button">
+                            <span class="fa fa-times" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+                <ul data-id="connect" class="main-nav--secondary menu">
+                    <li><a href="">Getting Started</a></li>
+                    <li><a href="">Events</a></li>
+                    <li><a href="">Ministries</a></li>
+                    <li class="show-for-medium">
+                        <button class="close-button" aria-label="Close alert" type="button">
+                            <span class="fa fa-times" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+                <ul data-id="about" class="main-nav--secondary menu">
+                    <li><a href="">One Church, Many Places</a></li>
+                    <li><a href="">Beliefs &amp; Traditions</a></li>
+                    <li><a href="">Staff</a></li>
+                    <li><a href="">History</a></li>
+                    <li><a href="">Governance</a></li>
+                    <li><a href="">Willow Creek Association</a></li>
+                    <li><a href="">Business Directory</a></li>
+                    <li><a href="">Privacy</a></li>
+                    <li><a href="">Building Campaigns</a></li>
+                    <li class="show-for-medium">
+                        <button class="close-button" aria-label="Close alert" type="button">
+                            <span class="fa fa-times" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+                <ul data-id="account" class="main-nav--secondary menu">
+                    <li><a href="/MyAccount">My Account</a></li>
+                    <li><WC:LogoutButton runat="server" /></li>
+                    <li class="show-for-medium">
+                        <button class="close-button" aria-label="Close alert" type="button">
+                            <span class="fa fa-times" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="line">
+            <header class="header--global">
+                
+                <div class="header--top-bar row">
+                    <figure class="logo-header columns medium-3">
+                        <a href="/" class="logo-header--logo">
+                            <img src="/Themes/WillowCreek/assets/logo-wide.svg" width="251" height="50" alt="Willow Creek logo">
+                        </a>
+                    </figure>
+                    <div class="header--nav-trigger hide-for-medium">
+                        <a href="#navigation"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <nav class="header--nav show-for-medium columns medium-9">
+                        <ul class="menu">
+                            <li class="header--nav--item has_more" data-id="locations"><a href="/locations">Locations</a></li>
+                            <li class="header--nav--item" data-id="media"><a href="/media">Media</a></li>
+                            <li class="header--nav--item has_more" data-id="care"><a href="/care">Care</a></li>
+                            <li class="header--nav--item has_more" data-id="connect"><a href="/connect">Connect</a></li>
+                            <li class="header--nav--item" data-id="act"><a href="/act">Act</a></li>
+                            <li class="header--nav--item" data-id="give"><a href="/give">Give</a></li>
+                            <li class="header--nav--item has_more last" data-id="about"><a href="/about">About</a></li>
+                            <WC:AccountButton runat="server" />
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            
+            <asp:ContentPlaceHolder ID="feature" runat="server"></asp:ContentPlaceHolder>
+
+            <asp:ContentPlaceHolder ID="main" runat="server"></asp:ContentPlaceHolder>
+
+            <footer class="footer--global" role="contentinfo">
+                <div class="footer--container" id="navigation">
+                    
+                        <img class="logo--footer" src="/Themes/WillowCreek/Assets/logo-mark.svg" width="56" height="56" alt="">
+                    
+                    
+                    <p class="legal">Willow Creek Association | <a href="/address">Update your address</a> | <a href="/privacy-policy">Privacy&nbsp;Policy</a> | <a href="/employment">Employment</a></p>
+                    <address>©Willow Creek Community Church | <a href="mailto:info@willowcreek.org">info@willowcreek.org</a> | <a href="mailto:8477655000">847-765-5000</a></address>
+                      
+                    <!-- These need to exist explicitly or else Rock will dump them at the bottom of the page -->
+                    <div style="display: none;">
+                        <Rock:Zone Name="Header" runat="server" />
+                        <Rock:Zone Name="Navigation" runat="server" />
+                        <Rock:Zone Name="Login" runat="server" />
+                        <Rock:Zone Name="Footer" runat="server" />
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <%-- controls for scriptmanager and update panel --%>
+        <asp:ScriptManager ID="sManager" runat="server" />
+        <asp:UpdateProgress ID="updateProgress" runat="server" DisplayAfter="800">
+            <ProgressTemplate>
+                <div class="updateprogress-status">
+                    <div class="spinner">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                </div>
+                <div class="updateprogress-bg modal-backdrop"></div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+
+    </form>
+    <script src="/Themes/WillowCreek/Scripts/app.js"></script>
+</body>
+</html>

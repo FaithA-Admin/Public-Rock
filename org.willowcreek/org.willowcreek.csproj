@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C139076A-4A29-4861-A6E8-00EBC7F00C34}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>org.willowcreek</RootNamespace>
+    <AssemblyName>org.willowcreek</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DDay.iCal, Version=1.0.2.575, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenXMLSDK-MOT.2.6.0.0\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DotLiquid">
+      <HintPath>..\DotLiquid\bin\Debug\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenXmlPowerTools, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenXmlPowerTools.4.2\lib\OpenXmlPowerTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\libs\Quartz\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock.Rest">
+      <HintPath>..\Rock.Rest\bin\Debug\Rock.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Packaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenXMLSDK-MOT.2.6.0.0\lib\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Rock.Rest\bin\Debug\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CheckIn\ActiveSchedule.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Files.cs" />
+    <Compile Include="Financial\ContributionStatements.cs" />
+    <Compile Include="Financial\GenerateContributionStatementTransaction.cs" />
+    <Compile Include="Financial\GeneratePledgeStatusLetterTransaction.cs" />
+    <Compile Include="Financial\PledgeStatusLetters.cs" />
+    <Compile Include="Financial\Teller.cs" />
+    <Compile Include="Jobs\ShelbyTellerImport.cs" />
+    <Compile Include="Jobs\SyncSecurityRoleMembers.cs" />
+    <Compile Include="Jobs\WorkflowCleanUp.cs" />
+    <Compile Include="Model\CampusMinistryPerson.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CampusMinistryPersonService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Extensions\ActionComponentExtension.cs" />
+    <Compile Include="Model\Extensions\PersonAliasServiceExtension.cs" />
+    <Compile Include="Model\Extensions\WorkflowExtension.cs" />
+    <Compile Include="Model\WillowEventItemMinistry.cs" />
+    <Compile Include="Model\WillowEventItemMinistryService.cs" />
+    <Compile Include="Model\WillowEventItemOccurrence.cs" />
+    <Compile Include="Model\WillowEventItemOccurrenceService.cs" />
+    <Compile Include="PersonProfile\Badge\Protection.cs" />
+    <Compile Include="Rest\CampusMinistryPersonsController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtectionBadge.cs" />
+    <Compile Include="Rest\WillowEventItemMinistryController.cs" />
+    <Compile Include="Rest\WillowEventItemOccurrencesController.cs" />
+    <Compile Include="Search\Common.cs" />
+    <Compile Include="Search\FamilyId.cs" />
+    <Compile Include="Data\WillowContext.cs" />
+    <Compile Include="Data\WillowService.cs" />
+    <Compile Include="Search\Name.cs" />
+    <Compile Include="SystemGuid\DefinedTypeGuids.cs" />
+    <Compile Include="SystemGuid\EntityTypeGuids.cs" />
+    <Compile Include="SystemGuid\GroupTypeGuids.cs" />
+    <Compile Include="SystemGuid\AttributeGuids.cs" />
+    <Compile Include="SystemGuid\DefinedValueGuids.cs" />
+    <Compile Include="SystemGuid\NoteTypeGuids.cs" />
+    <Compile Include="WordDocument.cs" />
+    <Compile Include="Workflow\Action\CancelWorkflowById.cs" />
+    <Compile Include="Workflow\Action\CancelWorkflowByParticipants.cs" />
+    <Compile Include="Workflow\Action\CheckIn\FilterGroupsByDefaultSetting.cs" />
+    <Compile Include="Workflow\Action\CheckIn\FilterGroupsByMembershipGradeAndAge.cs" />
+    <Compile Include="Workflow\Action\CheckIn\FindFamilies.cs" />
+    <Compile Include="Workflow\Action\CheckIn\SetAttributeFromCheckIn.cs" />
+    <Compile Include="Workflow\Action\CheckIn\SetAttendanceAttribute.cs" />
+    <Compile Include="Workflow\Action\Groups\AddPersonToGroupWFFromSelectUserControlAttribute.cs" />
+    <Compile Include="Workflow\Action\LavaToFile.cs" />
+    <Compile Include="Workflow\Action\LoadWorkflowIdByParticipants.cs" />
+    <Compile Include="Workflow\Action\People\CreateProtectionReference.cs" />
+    <Compile Include="Workflow\Action\People\AddGuestChild.cs" />
+    <Compile Include="Workflow\Action\People\NewFamily_Child.cs" />
+    <Compile Include="Workflow\Action\People\NewFamily_ParentGuardian.cs" />
+    <Compile Include="Workflow\Action\SQLtoExcel.cs" />
+    <Compile Include="Workflow\Action\Utility\SQLToSelectUserControlOptions.cs" />
+    <Compile Include="Workflow\Action\ShowHtml.cs" />
+    <Compile Include="Workflow\Action\SQLtoCSV.cs" />
+    <Compile Include="Workflow\Action\SaveCampusAndMinistryForPerson.cs" />
+    <Compile Include="Workflow\Action\SetCampusAndMinistryFromPerson.cs" />
+    <Compile Include="Workflow\Action\Elapse.cs" />
+    <Compile Include="Workflow\Action\Redirect.cs" />
+    <Compile Include="Workflow\Action\ValidateAddressForPerson.cs" />
+    <Compile Include="Workflow\Action\WorkflowContinuation.cs" />
+    <Compile Include="Workflow\Model\ElapseIntervalType.cs" />
+    <Compile Include="Workflow\WorkflowExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rock\Rock.csproj">
+      <Project>{185a31d7-3037-4dae-8797-0459849a84bd}</Project>
+      <Name>Rock</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1125 @@
+﻿//var WillowRock = (function (wr) {
+//    wr.genericStub = (function (g) {
+//        if (g == undefined) g = {};
+
+//        return g;
+//    }(wr.genericStub))
+
+//    return wr;
+//}(WillowRock));
+
+var WillowRock = (function (wr) {
+    if (wr == undefined) wr = {
+        //set the defaults for Willow
+    };
+    wr.utils = (function (u) {
+        if (u == undefined)
+            u = {
+                calculateAge: function (birthdate) {
+                    var today = new Date()
+                    var dob = new Date(birthdate);
+                    var years = today.getFullYear() - dob.getFullYear();
+                    var month = today.getMonth() - dob.getMonth();
+                    var day = today.getDate() - dob.getDate();
+                    //alert(month)
+                    //alert(day);
+                    if (month < 0)
+                        years--;
+                    else if (month == 0 && day < 0)
+                        years--;
+                    //alert(years)
+                    return years;
+                }
+            };
+        return u;
+    }(wr.utils));
+
+    wr.protectionApp = (function (pa) {
+        if (pa == undefined)
+            pa = {
+                //set the default for the protection application, shared between Applicant and Reference
+                $validInput: null,
+                $invalidInput: null,
+                $panes: null,
+                $currPane: null,
+                $dependents: null,
+                $dependentDict: null,
+                $maxLengthFields: null,
+                $requiredFields: null,
+                $btnYesIm: null,
+                $btnNoIm: null,
+                hasApplicantForm: false,
+                hasReferenceForm: false,
+                referencesVisible: false
+            };
+
+        pa.init = function (options) {
+            var options = {
+                personId: options.personId || null,
+                workflowId: options.workflowId || null,
+                appForm: $('#willow_pa_applicant_form'),
+                refForm: $('#willow_pa_reference_form')
+            }
+
+            pa.hasApplicantForm = options.appForm[0] != undefined;
+            pa.hasReferenceForm = options.refForm[0] != undefined;
+
+            if (pa.hasReferenceForm && pa.References) pa.References.init(options, pa.Applicant);
+            if (pa.hasApplicantForm && pa.Applicant) pa.Applicant.init(options, pa.References);
+
+            pa.$validInput = $('<span class="validated"><i class="fa fa-check-circle valid"></i></span>');
+            pa.$invalidInput = $('<span class="validated"><i class="fa fa-times-circle in-valid"></i></span>');
+            pa.$panes = $('.frm-pane');
+            pa.$currPane = $(pa.$panes.get(0));
+            pa.$dob = $('#DateOfBirth');
+            pa.$dependents = $('[data-dependent-on]');
+            pa.$dependentDict = new Array();
+            pa.$maxLengthFields = $('[maxlength]');
+            pa.$requiredFields = $('[required]');
+            pa.$btnYesIm = $('#btnYesIm');
+            pa.$btnNoIm = $('#btnNoIm');
+
+            //-->hide all panes except the first
+            pa.$panes.hide().first().show();
+            //-->hide all dependent questions
+            pa.$dependents.hide();
+            pa.$dependents.each(function () {
+                var depOn = $(this).attr('data-dependent-on');
+                var depVal = $(this).attr('data-dependent-value');
+                var isClassDep = depOn.indexOf('.') == 0;
+                var $trigger = isClassDep ? $(depOn) : $('#' + depOn);
+                if ($trigger[0] == undefined)
+                    $trigger = $('[name=' + depOn + ']');
+
+                if (pa.$dependentDict[depOn] == undefined) {
+                    pa.$dependentDict[depOn] = new Array();
+                }
+                if (pa.$dependentDict[depOn][depVal] == undefined) {
+                    var toggleDependencies = function () {
+                        var $trig = $(this);
+                        var dep = $trig.attr('id');
+                        var val = $trig.val();
+                        if ($trig.attr('type') == 'checkbox')
+                            val = '' + $trig.is(':checked');
+
+                        var $deps = pa.$dependentDict[dep];
+                        if (!$deps) {
+                            dep = $trig.attr('name');
+                            $deps = pa.$dependentDict[dep];
+                        }
+                        if (!$deps) {
+                            dep = $trig.attr('data-dependent-trigger');
+                            $deps = pa.$dependentDict[dep];
+                        }
+
+                        for (var p in $deps) {
+                            var ctrls = $deps[p];
+                            var deps = ctrls.dependents;
+
+                            var show = val == ctrls.value;
+                            if (dep == '.recent') {
+                                var trgs = $('.recent[value=1], .recent[value=2]');
+                                var hasRecent = false;
+                                trgs.each(function () {
+                                    if ($(this).is(':checked')) {
+                                        hasRecent = true;
+                                        return false;
+                                    }
+                                });
+                                if (hasRecent || show && !deps.is(':visible'))
+                                    deps.show();
+                                else if (!hasRecent)
+                                    deps.hide();
+                            } else {
+                                deps.hide();
+                            }
+                        }
+
+                        var ctrls = $deps[val];
+                        if (ctrls != undefined) {
+                            $deps = ctrls.dependents;
+                            var show = val == ctrls.value;
+                            $deps.toggle(show);
+                        }
+                    }
+                    $trigger.change(toggleDependencies);
+
+                    pa.$dependentDict[depOn][depVal] = {
+                        trigger: $trigger,
+                        dependents: $('[data-dependent-on="' + depOn + '"][data-dependent-value="' + depVal + '"]'),
+                        value: depVal
+                    };
+                }
+            });
+
+            //-->enable validation // should we use jquery.validate() instead?
+            pa.Validation = new WillowRockValidation({
+                failureMsg: function () {
+                    return pa.$invalidInput.clone();
+                },
+                specialFields: ["MobilePhone", "HomePhone", "ApplicantSignature", "ApplicantSignature2"],
+                successMsg: function () {
+                    return pa.$validInput.clone();
+                }
+            });
+
+            pa.$requiredFields.blur(pa.Validation.validateInput);
+            pa.$requiredFields.change(pa.Validation.validateInput);
+            pa.$maxLengthFields.keydown(function (e) {
+                if ((48 <= e.keyCode && e.keyCode <= 90) || (96 <= e.keyCode && e.keyCode <= 105)) {
+                    var $inp = $(this);
+                    var max = $inp.attr('maxlength');
+                    var val = $inp.val().replace(/_/g, '');
+                    if (val.length == max) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            });
+            pa.$maxLengthFields.keyup(function (e) {
+                var $inp = $(this);
+                var $cntr = $inp.parent().find('.counter');
+                var min = $inp.attr('data-minlength');
+                var max = $inp.attr('maxlength');
+                var len = $inp.val().length;
+                if (len < min) {
+                    $cntr.text('Please explain further, you\'ve only got ' + (min - len) + ' chars more to type');
+                } else {
+                    $cntr.text(len + ' of ' + max + ' chars allowed');
+                }
+            });
+            pa.$dob.change(function () {
+                var age = WillowRock.utils.calculateAge(pa.$dob.val());
+                if (age < 18) {
+                    $('#Guardian_Yes').prop('checked', true);
+                    $('#Guardian').hide();
+                } else {
+                    $('#Guardian').show();
+                }
+            });
+
+            //ui events
+            pa.$btnYesIm.click(function (e) {
+                e.preventDefault();
+                var $cpane = pa.$currPane,//$($panes.get(currIdx)),
+                    $npane = $cpane.next('.frm-pane');//$($panes.get(currIdx - 1));
+                $cpane.slideUp();
+                $npane.slideDown(function () {
+                    window.scrollTo(0, 0);
+                });
+                pa.Applicant.$btnContinue.show();
+                pa.$btnYesIm.hide();
+                pa.$btnNoIm.hide();
+                pa.$currPane = $npane;
+            });
+            pa.$btnNoIm.click(function (e) {
+                e.preventDefault();
+                var $cpane = pa.$currPane,
+                    $npane = $('#pnlWrongUser');
+                $cpane.slideUp();
+                $npane.slideDown(function () {
+                    window.scrollTo(0, 0);
+                });
+                pa.$btnYesIm.hide();
+                pa.$btnNoIm.hide();
+                pa.$currPane = $npane;
+            });
+        };
+
+        return pa;
+    }(wr.protectionApp))
+
+    wr.init = function (options) {
+        //init any children
+        wr.protectionApp.init(options);
+    }
+    return wr;
+}(WillowRock));
+
+
+//for Applicant, we do in another module with same name incase we decide to split files
+var WillowRock = (function (wr) {
+    wr.protectionApp = (function (pa) {
+        if (pa == undefined) pa = {};
+
+        pa.Applicant = function (a) {
+            if (a == undefined)
+                a = {
+                    $buttons: null,
+                    $btnContinue: null,
+                    $btnBack: null,
+                    $validationMsg: null,
+                    form: null
+                    //,References: null
+                };
+
+            a.appendError = function (msg) {
+                a.$validationMsg.append('<i class="fa fa-times-circle in-valid"></i> <span>' + msg + '</span>');
+                a.$validationMsg.fadeIn(400);
+            };
+
+            a.setLegalName = function () {
+                var $firstName = $('#LegalFirstName');
+                var $middleName = $('#MiddleName');
+                var $lastName = $('#LastName');
+                var first = $firstName.val().replace(/\s+/g, '');
+                var middle = $middleName.val().replace(/\s+/g, '');
+                var last = $lastName.val().replace(/\s+/g, '');
+                $('#FullLegalName').val(first + (middle.length > 0 ? (' ' + middle) : '') + ' ' + last);
+            }
+            a.init = function (options, r) {
+                a.personId = options.personId,
+                a.workflowId = options.workflowId,
+                a.ApplicantPersonAliasGuid = options.ApplicantPersonAliasGuid,
+                a.form = options.appForm;
+//                a.References = r;
+                a.$buttons = $('#willow_pa_applicant_buttons');
+                a.$btnContinue = $('#btnApplicantContinue');
+                a.$btnBack = $('#btnApplicantBack');
+                a.$validationMsg = $('#applicant-validation-message');
+                a.$validationMsg.hide();
+
+                a.$btnBack.click(function (e) {
+                    e.preventDefault();
+
+                    var $cpane = pa.$currPane,//$($panes.get(currIdx)),
+                        $ppane = $cpane.prev('.frm-pane');//$($panes.get(currIdx - 1));
+                    if ($ppane[0]) {
+                        //previous pane
+                        $cpane.slideUp(400, function () {
+//                            if (typeof (pa.showRefCounts) == 'function') pa.showRefCounts();
+
+                            if ($('#LegalFirstName').is(':visible'))
+                                a.$btnBack.hide();
+                        });
+                        $ppane.slideDown();
+
+                        a.$btnContinue.show();
+                        pa.$currPane = $ppane;
+                    } else {
+                        //first
+                        //alert('first');
+                        a.$btnBack.hide();
+                    }
+                    return false;
+                });
+                a.$btnContinue.click(function (e) {
+                    e.preventDefault();
+                    var $cpane = pa.$currPane,//$($panes.get(currIdx)),
+                        $npane = $cpane.next('.frm-pane');//$($panes.get(currIdx - 1));
+                    var $frmRequired = $cpane.find('[required]');
+                    a.$validationMsg.hide();
+                    a.$validationMsg.empty();
+
+                    //validate all required fields
+                    var isValid = true;
+                    $frmRequired.each(function () {
+                        var $ctrl = $(this);
+                        var valid = pa.Validation.validateInput.call(this);
+                        if (valid == false) {
+                            var msg = $ctrl.attr('data-validation-message');
+                            $ctrl.focus();
+                            a.appendError(msg);
+                            isValid = false;
+                            return false;
+                        }
+                    });
+                    if (isValid) {
+                        if ($npane[0]) {
+                            //next pane
+                            if ($cpane.find('#chkCorrectInfo')[0]) {
+                                //alert('correct info');
+                                if (!$('#chkCorrectInfo').is(':checked')) {
+                                    a.appendError('You must acknowledge that the information provided is correct');
+                                    $('#chkCorrectInfo').focus();
+                                } else if (!$('#chkAuthReleaseInfo').is(':checked')) {
+                                    a.appendError('You must authorize the release of your information');
+                                    $('#chkAuthReleaseInfo').focus();
+                                } else { // if (pa.hasReferenceForm) {
+
+                                    //if (!pa.referencesVisible) {
+                                    //    //alert('show references');
+                                    //    pa.referencesVisible = true;
+
+                                    //    a.References.$btnAddRef.show();
+
+                                    //    a.References.$buttons.show();
+                                    //    a.References.$btnBack.show();
+                                    //    a.References.$btnContinue.show();
+
+                                    a.$buttons.hide();
+                                    a.submitForm();
+                                    //} else {
+                                    //    alert('hide references');
+                                    //}
+
+                                    //$cpane.slideUp();
+                                    //$npane.slideDown(function () {
+                                    //    a.References.showRefCounts();
+                                    //    window.scrollTo(0, 0);
+                                    //});
+                                    //pa.$currPane = $npane;
+                             //   }
+                                }
+                            } else {
+                                $cpane.slideUp();
+                                $npane.slideDown(400, function () {
+                                    window.scrollTo(0, 0);
+                                });
+
+                                a.setLegalName();
+                                a.$btnBack.show();
+                                pa.$currPane = $npane;
+
+                                //if (!pa.referencesVisible)
+                                //    a.References.$refCount.parent().hide();
+
+                                //do we have a legal guardian?
+                                var $guardianSignature = $('#GuardianSignature');
+                                if ($guardianSignature.is(':visible')) {
+                                    if ($('#Guardian_Yes').is(':checked'))
+                                        $guardianSignature.closest('div.row').show();
+                                }
+                            }
+                        } else {
+                            //complete
+                            alert('complete')
+                        }
+                    }
+                    return false;
+                });
+            };
+
+            a.loadFormData = function (personId, workflowId) {
+                var childCount = parseInt($('#ChildrenCount').val());
+                var data = {
+                    SubmissionDate: new Date(),
+                    ApplicantPersonId: personId,
+                    WorkflowId: workflowId,
+                    ApplicantPersonAliasGuid: $('#ApplicantPersonAliasGuid').val(),
+                    ApplicantSsn: $('#ApplicantSsn').val(),
+                    LegalFirstName: $('#LegalFirstName').val(),
+                    MiddleName: $('#MiddleName').val(),
+                    LastName: $('#LastName').val(),
+                    FullLegalName: $('#FullLegalName').val(),
+                    Nickname: $('#Nickname').val(),
+                    MaidenName: $('#PreviousName').val(),
+                    CurrentAddressStreet: $('#CurrentAddressStreet').val(),
+                    CurrentAddressCity: $('#CurrentAddressCity').val(),
+                    CurrentAddressState: $('#CurrentAddressState').val(),
+                    CurrentAddressZip: $('#CurrentAddressZip').val(),
+                    TimeAtCurrentAddress: $('[name=livedCurrentMoreThan12]:checked').val(),
+                    PreviousAddressStreet: $('#PreviousAddressStreet').val(),
+                    PreviousAddressCity: $('#PreviousAddressCity').val(),
+                    PreviousAddressState: $('#PreviousAddressState').val(),
+                    PreviousAddressZip: $('#PreviousAddressZip').val(),
+                    HomePhone: $('#HomePhone').val(),
+                    MobilePhone: $('#MobilePhone').val(),
+                    EmailAddress: $('#EmailAddress').val(),
+                    Gender: $('[name=Gender]:checked').val(),
+                    DateOfBirth: $('#DateOfBirth').val(),
+                    MaritalStatus: $('#Marital_Status').val(),
+                    ChildrenCount: isNaN(childCount) ? 0 : childCount,
+                    ChildrenAges: $('#Ages').val(),
+                    LegalGuardian: $('[name=Guardian]:checked').val(),
+                    AttendWccc: $('[name=WCCC]:checked').val(),
+                    StartWccc: $('#WCCC_Date').val(),
+                    PornographyAddiction: $('[name=Porno]:checked').val(),
+                    AlcoholAddiction: $('[name=Alcohol]:checked').val(),
+                    DrugAddiction: $('[name=Drugs]:checked').val(),
+                    AddictionExplain: $('#Addiction_Explain').val(),
+                    PornographyVulnerable: $('[name=lookedAtPorn]:checked').val(),
+                    PornographyVulnerableExplain: $('#lookedAtPorn_Explain').val(),
+                    DcfsInvestigation: $('[name=DCFS]:checked').val(),
+                    DcfsInvestigationExplain: $('#DCFS_Explain').val(),
+                    OrderOfProtection: $('[name=OOP]:checked').val(),
+                    OrderOfProtectionExplain: $('#OOP_Explain').val(),
+                    CommittedOrAccused: $('[name=ComittedOrAccused]:checked').val(),
+                    CommittedOrAccusedExplain: $('#ComittedOrAccused_Explain').val(),
+                    RelationshipVulnerable: $('[name=RelWithVuln]:checked').val(),
+                    RelationshipVulnerableExplain: $('#RelWithVuln_Explain').val(),
+                    AskedToLeave: $('[name=Misconduct]:checked').val(),
+                    AskedToLeaveExplain: $('#Misconduct_Explain').val(),
+                    CorrectInfo: $('#chkCorrectInfo').is(':checked'),
+                    AuthorizeRelease: $('#chkAuthReleaseInfo').is(':checked'),
+                    AuthorizeReference: $('#chkAuthReleaseRef').is(':checked'),
+                    Signature: $('#ApplicantSignature').val(),
+                    SignatureDate: $('#ApplicantSignatureDate').val(),
+                    GuardianSignature: $('#GuardianSignature').val(),
+                    GuardianSignatureDate: $('#GuardianSignatureDate').val(),
+                    CampusId: 0
+                };
+                //if (pa.hasReferenceForm)
+                //    $.extend(data, a.References.loadFormData());
+
+                return data;
+            };
+
+            a.submitForm = function () {
+                var data = a.loadFormData(a.personId, a.workflowId);
+                $.ajax({
+                    url: '/api/questionnaire',
+                    accepts: 'JSON',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        "Cache-Control": "no-cache, no-store, must-revalidate",
+                        "Pragma": "no-cache",
+                        "Expires": "0"
+                    },
+                    type: 'POST',
+                    success: function (e) {
+                        //success
+                        if (e.success) {
+                            //alert('Success');
+                            var $cpane = pa.$currPane,
+                                $npane = $cpane.next('.frm-pane');
+
+                            $cpane.slideUp();
+                            $npane.slideDown(400, function () { window.scrollTo(0, 0); });
+                            pa.$currPane = $npane;
+                        } else if (e.errors.length > 0) {
+                            var ssnError = false;
+                            for (var err in e.errors) {
+                                var eMsg = e.errors[err];
+                                alert(eMsg);
+                                if (eMsg.indexOf('Social Security Number') > 0) {
+                                    ssnError = true;
+                                    $('#ApplicantSsn').focus();
+                                }
+                            }
+                            if (!ssnError) {
+                                //a.References.$btnBack.show();
+                                //a.References.$btnContinue.show();
+                            } else {
+                                var $cpane = pa.$currPane,
+                                    $npane = $('#ApplicantSsn').parent('.frm-pane');
+
+                                $cpane.slideUp();
+                                $npane.slideDown(400, function () { window.scrollTo(0, 0); });
+                                pa.$currPane = $npane;
+
+                                //TODO Redirect to url passed from controller
+
+                                a.$btnBack.show();
+                                a.$btnContinue.show();
+                            }
+                        }
+                    },
+                    error: function (e) {
+                        var error = e.error();
+                        alert('Error: ' + error.statusText + ' - ' + error.responseText);
+                        a.$buttons.show();
+                    }
+                });
+            };
+
+            return a;
+        }(pa.Applicant);
+
+        return pa;
+    }(wr.protectionApp))
+
+    return wr;
+}(WillowRock));
+
+//for references, we do in another module with same name incase we decide to split files
+var WillowRock = (function (wr) {
+    wr.protectionApp = (function (pa) {
+        if (pa == undefined) pa = {};
+
+        pa.References = (function (r) {
+            if (r == undefined)
+                //set the default for the protection application references
+                r = {
+                    $btnAddRef: null,
+                    $referenceList: null,
+                    $refPane: null,
+                    $refCount: null,
+                    Applicant: null,
+                    form: null,
+                    refCnt: 0,
+                    currRefIdx: null,
+                    $buttons: null,
+                    $btnContinue: null,
+                    $btnBack: null,
+                    $validationMsg: null,
+                    list: new Array()
+                };
+
+            r.appendError = function (msg) {
+                r.$validationMsg.append('<i class="fa fa-times-circle in-valid"></i> <span>' + msg + '</span>');
+                r.$validationMsg.fadeIn(400);
+            };
+            r.reportError = function ($ctrl, msg) {
+                if (msg == undefined)
+                    msg = $ctrl.attr('data-validation-message');
+                $ctrl.focus();
+                r.appendError(msg);
+            };
+            r.init = function (options, a) {
+                r.form = options.refForm;
+                r.Applicant = a;
+                r.$btnAddRef = $('#btnAddRef');
+                r.$referenceList = $('#referenceList');
+                r.$refPane = $('#refPane');
+                r.$refCount = $('.refCount');
+                r.$buttons = $('#willow_pa_reference_buttons');
+                r.$btnContinue = $('#btnReferenceContinue');
+                r.$btnBack = $('#btnReferenceBack');
+                r.$validationMsg = $('#reference-validation-message');
+
+                //move the reference buttons if we have a container
+                var buttonContainer = $('#buttonContainer');
+                if (buttonContainer[0]) buttonContainer.append(r.$buttons);
+
+                r.$validationMsg.hide();
+                r.$btnAddRef.hide();
+                r.$refCount.parent().hide();
+                r.$referenceList.hide();
+
+                r.showRefCounts();
+
+                r.$btnAddRef.click(function (e) {
+                    e.preventDefault();
+
+                    var $cpane = pa.$currPane;
+                    var $frmRequired = $cpane.find('[required]');
+                    var $RefEmail = $cpane.find('#RefEmail');
+                    var $RefAssociation = $cpane.find('#RefAssociation');
+
+                    r.$validationMsg.hide();
+                    r.$validationMsg.empty();
+
+                    //validate all required fields
+                    var isValid = true;
+                    var valid;
+                    var msg;
+                    var reference = {};
+                    var email = $RefEmail.val();
+
+                    //validate the email and contact information
+                    valid = pa.Validation.validateInput.call($RefEmail);
+                    if (valid == false) {
+                        r.reportError($ctrl);
+                        isValid = false;
+                    } else {
+                        for (var idx in r.list) {
+                            var ref = r.list[idx];
+                            if (idx != r.currRefIdx)
+                                if (email.toLowerCase() == ref.Contact.toLowerCase()) {
+                                    r.reportError($RefEmail, "References must have unique email addresses");
+                                    isValid = false;
+                                }
+                        }
+                        if (isValid)
+                            reference.Contact = email;
+                    }
+                    //make sure the reference is not a family member
+                    valid = pa.Validation.validateInput.call($RefAssociation);
+                    //alert($RefAssociation.val())
+                    if (valid == true && $RefAssociation.val() == 'Family') {
+                        r.reportError($RefAssociation, 'Family members cannot be used as references. In order to continue, please provide us with a new reference who meets the requirements listed above.');
+                        isValid = false;
+                    }
+
+                    //validate all remaining fields
+                    if (isValid) {
+                        $frmRequired.each(function () {
+                            var $ctrl = $(this);
+                            valid = pa.Validation.validateInput.call(this);
+                            if (valid == false) {
+                                r.reportError($ctrl);
+                                isValid = false;
+                                return false;
+                            }
+                        });
+                    }
+                    if (isValid) {
+
+                        //clear the inputs and build the reference 
+                        $frmRequired.each(function () {
+                            var $ctrl = $(this);
+                            if ($ctrl.is(':visible')) {
+                                var value = $ctrl.val();
+                                switch ($ctrl.attr('type')) {
+                                    case 'checkbox':
+                                    case 'radio':
+                                        if (!$ctrl.is(':checked'))
+                                            value = undefined;
+                                        break;
+                                    default:
+                                        value;
+                                        break;
+                                }
+                                if (value)
+                                    eval('reference.' + $ctrl.attr('name').replace('Ref', '') + '="' + value + '";');
+                            }
+                            switch ($ctrl.attr('type')) {
+                                case 'checkbox':
+                                case 'radio':
+                                    $ctrl.removeAttr('checked');
+                                    break;
+                                default:
+                                    $ctrl.val('');
+                                    break;
+                            }
+                        });
+                        $RefEmail.val('');
+
+                        var row;
+                        if (r.currRefIdx == null) {
+                            //add the reference
+                            r.list.push(reference);
+                            row = $('<div class="row form-group"></div>');
+                            row.attr('data-index', r.list.length - 1);
+                        } else {
+                            //replace the reference
+                            r.list.splice(r.currRefIdx, 1, reference);
+                            row = $('[data-index=' + r.currRefIdx + ']');
+                            row.empty();
+                            r.currRefIdx = null;
+                        }
+                        //alert(JSON.stringify(references));
+
+                        row.append('<div class="col-md-3">' + reference.Name + '</div>');
+                        row.append('<div class="col-md-3">' + reference.Association + '</div>');
+                        row.append('<div class="col-md-5">' + reference.Contact + '</div>');
+
+                        //enable editing
+                        var $cell = $('<div class="col-md-1"/>');
+                        var $edit = $('<button class="btn">Edit</button>');
+                        $cell.append($edit);
+                        row.append($cell);
+                        $edit.click(function (e) {
+                            e.preventDefault();
+
+                            var $btn = $(this);
+                            var $par = $btn.parent().parent();
+                            r.currRefIdx = $par.attr('data-index');
+                            var ref = r.list[r.currRefIdx];
+                            for (var p in ref) {
+                                var $inp = r.$refPane.find('[name=Ref' + p + ']');
+                                switch ($inp.attr('type')) {
+                                    case 'checkbox':
+                                    case 'radio':
+                                        $inp.each(function () {
+                                            var $i = $(this);
+                                            if (ref[p] == $i.val()) {
+                                                $i.prop('checked', true);
+                                                $i.trigger('change');
+                                            }
+                                        });
+                                        break;
+                                    default:
+                                        $inp.val(ref[p]);
+                                        $inp.trigger('change');
+                                        break;
+                                }
+                            }
+                            $RefEmail.val(ref.Contact);
+
+                            //reduce the count for the user to update
+                            if (r.refCnt > 0)
+                                r.refCnt--;
+                            r.$btnAddRef.text('Done');
+                            r.$refPane.slideDown();
+                        });
+
+                        r.$referenceList.append(row);
+                        r.$referenceList.show();
+                        r.$refPane.find('.validated').remove();
+                        r.$refPane.find('[data-dependent-on]').hide();
+
+                        r.refCnt++;
+                        r.$refCount.text(r.refCnt);
+                    }
+                    if (r.refCnt == 3) {
+                        //done with references, renable screen
+                        r.$btnContinue.removeClass('ui-state-disabled');
+                        r.$btnContinue.removeAttr('disabled');
+                        r.$refPane.slideUp();
+                    } else if (r.refCnt == 0) {
+                        r.$referenceList.hide();
+                    } else {
+                        r.$btnAddRef.text('Add');
+                    }
+                });
+
+                r.$btnBack.click(function (e) {
+                    e.preventDefault();
+
+                    var $cpane = pa.$currPane,
+                        $ppane = $cpane.prev('.frm-pane');
+                    if ($ppane[0]) {
+                        if (r.form.is(':visible')) {
+                            //go back to questionnaire
+                            pa.referencesVisible = false;
+
+                            r.$btnAddRef.hide();
+                            r.$buttons.hide();
+                            r.Applicant.$buttons.show();
+                        } else {
+                            //alert('references visible');
+
+                            r.$btnContinue.show();
+                        }
+
+                        //previous pane
+                        $cpane.slideUp();
+                        $ppane.slideDown(function () {
+                            r.showRefCounts();
+                        });
+
+                        pa.$currPane = $ppane;
+                    } else {
+                        //first
+                        //alert('first');
+                        r.$btnBack.hide();
+                    }
+
+                    return false;
+                });
+
+                r.$btnContinue.click(function (e) {
+                    e.preventDefault();
+                    var $cpane = pa.$currPane,//$($panes.get(currIdx)),
+                        $npane = $cpane.next('.frm-pane');//$($panes.get(currIdx - 1));
+                    var $frmRequired = $cpane.find('[required]');
+                    r.$validationMsg.hide();
+                    r.$validationMsg.empty();
+
+                    //validate all required fields
+                    var isValid = true;
+                    $frmRequired.each(function () {
+                        var $ctrl = $(this);
+                        var valid = pa.Validation.validateInput.call(this);
+                        if (valid == false) {
+                            var msg = $ctrl.attr('data-validation-message');
+                            $ctrl.focus();
+                            r.appendError(msg);
+                            isValid = false;
+                            return false;
+                        }
+                    });
+                    if (isValid) {
+                        if ($npane[0]) {
+                            //next pane
+                            if (!$('#chkAuthReleaseRef').is(':visible')) {
+
+                                $cpane.slideUp(function () {
+                                    r.showRefCounts();
+                                });
+                                $npane.slideDown(function () {
+                                    r.showRefCounts();
+                                    window.scrollTo(0, 0);
+                                });
+                                pa.$currPane = $npane;
+                            } else {
+                                alert('submitting');
+                                if (!$('#chkAuthReleaseRef').is(':checked')) {
+                                    r.appendError('You must authorize any listed references to provide information');
+                                    $('#chkAuthReleaseRef').focus();
+                                } else {
+                                    if (pa.hasApplicantForm)
+                                        pa.Applicant.submitForm();
+                                    else
+                                        r.submitForm();
+                                    r.$btnBack.hide();
+                                    r.$btnContinue.hide();
+                                }
+                            }
+                        } else {
+                            //complete
+                            alert('complete')
+                        }
+                    }
+                    return false;
+                });
+            };
+
+            r.loadFormData = function () {
+                return {
+                    Reference1Name: r.list[0].Name,
+                    Reference1Phone: '',
+                    Reference1Email: r.list[0].Contact,
+                    Reference1NatureOfAssociation: r.list[0].Association,
+                    Reference2Name: r.list[1].Name,
+                    Reference2Phone: '',
+                    Reference2Email: r.list[1].Contact,
+                    Reference2NatureOfAssociation: r.list[1].Association,
+                    Reference3Name: r.list[2].Name,
+                    Reference3Phone: '',
+                    Reference3Email: r.list[2].Contact,
+                    Reference3NatureOfAssociation: r.list[2].Association
+                };
+            };
+
+            r.showRefCounts = function () {
+                if (r.$btnAddRef.is(':visible') ||
+                    (r.$referenceList.is(':visible') && r.list.length == 3)) {
+                    if (r.list.length < 3) {
+                        r.$btnContinue.addClass('ui-state-disabled');
+                        r.$btnContinue.attr('disabled', '');
+                    }
+                    r.$refCount.parent().show();
+                }
+                else {
+                    r.$btnContinue.removeClass('ui-state-disabled');
+                    r.$btnContinue.removeAttr('disabled', '');
+                    r.$refCount.parent().hide();
+                }
+            };
+
+            r.submitForm = function () {
+                var data = r.loadFormData();
+                $.ajax({
+                    url: '/api/questionnaire/references',
+                    accepts: 'JSON',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        "Cache-Control": "no-cache, no-store, must-revalidate",
+                        "Pragma": "no-cache",
+                        "Expires": "0"
+                    },
+                    type: 'POST',
+                    success: function (e) {
+                        //success
+                        if (e.success) {
+                            //alert('Success');
+                            var $cpane = pa.$currPane,
+                                $npane = $cpane.next('.frm-pane');
+
+                            $cpane.slideUp();
+                            $npane.slideDown(400, function () { window.scrollTo(0, 0); });
+                            pa.$currPane = $npane;
+                        } else if (e.errors.length > 0) {
+                            for (var err in e.errors) {
+                                var eMsg = e.errors[err];
+                                alert(eMsg);
+                            }
+                            pa.Applicant.$btnBack.show();
+                            pa.Applicant.$btnContinue.show();
+                        }
+                    },
+                    error: function (e) {
+                        var error = e.error();
+                        alert('Error: ' + error.statusText + ' - ' + error.responseText);
+                        pa.Applicant.$btnBack.show();
+                        pa.Applicant.$btnContinue.show();
+                    }
+                });
+            };
+
+            return r;
+        }(pa.References))
+
+        return pa;
+    }(wr.protectionApp))
+
+    return wr;
+}(WillowRock));
+
+
+//Willow's Custom Validation method, could be split into another file.
+var WillowRockValidation = function (options) {
+    if (options == undefined)
+        options = {
+            failureMsg: function () {
+                return $('<div>Failed<div>');
+            },
+            specialFields: [],
+
+            successMsg: function () {
+                return $('<div>Success<div>');
+            }
+        }
+    var vld = this;
+    vld.failureMsg = options.failureMsg;
+    vld.specialFields = options.specialFields;
+    vld.successMsg = options.successMsg;
+    vld.isValidDate = function (value, userFormat) {
+        userFormat = userFormat || 'mm/dd/yyyy', // default format
+
+        delimiter = /[^mdy]/.exec(userFormat)[0],
+        theFormat = userFormat.split(delimiter),
+        theDate = value.split(delimiter),
+
+        isDate = function (date, format) {
+            var m, d, y
+            for (var i = 0, len = format.length; i < len; i++) {
+                if (/m/.test(format[i])) m = date[i]
+                if (/d/.test(format[i])) d = date[i]
+                if (/y/.test(format[i])) y = date[i]
+            }
+            return (
+              m > 0 && m < 13 &&
+              y && y.length === 4 &&
+              d > 0 && d <= (new Date(y, m, 0)).getDate()
+            )
+        }
+
+        return isDate(theDate, theFormat)
+
+    };
+    vld.validateDate = function (val) {
+        var valid = val.match(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/i) != null;
+        if (!valid)//date doesn't match 01/01/2015 lets check 2015-01-01
+            valid = val.match(/^\d{2,4}(\/)|(-)\d{1,2}(\/)|(-)\d{1,2}$/i) != null;
+        if (valid)//check to make sure that it is an actual valid date
+            valid = vld.isValidDate(val);
+        if (valid) {
+            //make sure the date is not in the future
+            var date = new Date(val);
+            var now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            if (date > now)
+                return ' Date cannot be in the future';
+        }
+        if (!valid) return ' Invalid Date';
+        else return '';
+    }
+    vld.validateEmail = function (val) {
+        var valid = val.match(/^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i) != null;
+        if (!valid) return ' Invalid Email';
+        else return '';
+    }
+    vld.validatePhone = function (val) {
+        var valid = val.match(/^[\\(]{0,1}([0-9]){3}[\\)]{0,1}[ ]?([^0-1]){1}([0-9]){2}[ ]?[-]?[ ]?([0-9]){4}[ ]*((x){0,1}([0-9]){1,5}){0,1}$/i) != null;
+        if (!valid) return ' Invalid Phone';
+        else return '';
+    }
+    vld.validateInputField = function ($ctrl, val) {
+        var min = $ctrl.attr('data-minlength') || 0;
+        var valid = val && val.length > min;
+        var crole = $ctrl.attr('data-role');
+        var ctype = $ctrl.attr('type');
+        var addMsg = (val && val.length < min) ? 'You must enter at least ' + min + ' characters' : '';
+        if (ctype == 'radio') {
+            var $rdo = $('input[name=' + $ctrl.attr('name') + ']');
+            valid = $rdo.is(':checked');
+            $parent = $rdo.last().parent();
+        } else if (ctype == 'date') {
+            addMsg = vld.validateDate(val);
+            valid = addMsg.length == 0;
+            //alert('validating ' + val + ' as date is ' + valid);
+        } else if (ctype == 'email') {
+            addMsg = vld.validateEmail(val);
+            valid = addMsg.length == 0;
+            //alert('validating ' + val + ' as email is ' + valid);
+        } else if (ctype == 'tel') {
+            addMsg = vld.validatePhone(val);
+            valid = addMsg.length == 0;
+            //alert('validating ' + val + ' as phone is ' + valid);
+        } else if (crole != undefined) {
+            switch (crole) {
+                case 'date':
+                    addMsg = vld.validateDate(val);
+                    valid = addMsg.length == 0;
+                    //alert('validating ' + val + ' as date is ' + valid);
+                    break;
+                case 'email':
+                    addMsg = vld.validateEmail(val);
+                    valid = addMsg.length == 0;
+                    //alert('validating ' + val + ' as email is ' + valid);
+                    break;
+                case 'phone':
+                    addMsg = vld.validatePhone(val);
+                    valid = addMsg.length == 0;
+                    //alert('validating ' + val + ' as phone is ' + valid);
+                    break;
+            }
+        }
+        return { valid: valid, msg: addMsg };
+    }
+    vld.validateInput = function () {
+        var $ctrl = $(this);
+        var $parent = $ctrl.parent();
+        var ctrlId = this.id;
+        var val = $ctrl.val();
+
+        if ($ctrl.is(':visible') == true) {
+            var isSpecial = false;
+            var valid = true;
+            var addMsg = '';
+
+            for (var s in vld.specialFields) {
+                if (vld.specialFields[s] == ctrlId) {
+                    isSpecial = true;
+                    break;
+                }
+            }
+
+            var vobj = vld.validateInputField($ctrl, val);
+            valid = vobj.valid;
+            addMsg = vobj.msg;
+            //alert(isSpecial)
+            //alert(ctrlId)
+            var matchKey = $ctrl.attr('data-validation-match');
+            if (isSpecial) {
+                switch (ctrlId) {
+                    case "ApplicantSignature":
+                    case "ApplicantSignature2":
+                        var sig = $('#' + ctrlId).val();
+                        var name = $('#FullLegalName').val();
+                        var nameo = name;
+                        sig = sig.replace(/\s+/gi, '');
+                        name = name.replace(/\s+/gi, '');
+
+                        if (sig != name) {
+                            valid = false;
+                            addMsg = " Your signature must match: " + nameo;
+                        }
+
+                        break;
+                    case "MobilePhone":
+                    case "HomePhone":
+                        var home = $('#HomePhone').val();
+                        var mobile = $('#MobilePhone').val();
+                        //alert(home)
+                        if (home != '' && mobile != '')
+                            valid = valid && true;
+                        else if (mobile == '' && home == '') {
+                            $parent = $('#MobilePhone').parent();
+                            valid = false;
+                        } else if (mobile != '' && home == '') {
+                            $parent = $('#MobilePhone').parent();
+                            $('#HomePhone').parent().find('span.validated').remove();
+                            valid = true;
+                        }
+                        break;
+                }
+            } else if (matchKey) {
+                var match = $('#' + matchKey);
+                var isMatch = match.val() == val;
+                if (!isMatch) {
+                    valid = false;
+                    addMsg = " Must match";
+                }
+            }
+
+
+            $parent.children('.validated').remove();
+            var msg;
+            if (valid) {
+                msg = vld.successMsg();
+            }
+            else {
+                msg = vld.failureMsg().append(addMsg);
+            }
+            $parent.append(msg);
+            var width = $parent.outerWidth(true);// - msg.outerWidth(true)-3;
+            //if (width > 25)
+            //    alert(width);
+            msg.css({ left: width + 'px' })
+            return valid;
+        } else {
+            return true;
+        }
+    };
+    return vld;
+};

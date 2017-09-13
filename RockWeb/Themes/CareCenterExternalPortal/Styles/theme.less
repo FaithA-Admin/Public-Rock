@@ -1,0 +1,192 @@
+﻿
+// Load Master Styles
+// -------------------------
+@import "../../../Styles/Bootstrap/variables.less";
+@import "../../../Styles/_rock-core.less";
+@import "../../../Styles/_store.less";
+@import "../../../Styles/_rock-variables.less";
+@import "_variables.less";
+@import "_variable-overrides.less";
+@import "_print.less";
+
+/*
+    Rock Theme Styles
+
+    1. HTML Overrides
+    2. Bootstrap Overides
+    3. Theme Styling
+    4. Responsive Overrides
+
+*/
+
+// 1. HTML Overrides
+// -------------------------
+
+html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    display: block;
+}
+
+hr {
+    border-top: 1px dashed #E3E3E3;
+}
+
+// 2. Bootstrap Overrides
+// -------------------------
+/* hide block panels */
+.panel.panel-block {
+    border: 0;
+    box-shadow: none;
+
+    & > .panel-heading,
+    & > .rock-panel-drawer {
+        display: none;
+    }
+
+    & > .panel-body {
+        padding: 0;
+
+        .grid.grid-panel {
+            margin: 0;
+        }
+    }
+}
+
+
+// 3. Theme Styling
+// -------------------------
+
+body {
+    background-color: #3f3f3e;
+    background: url(../Assets/Images/background-leaves.png) top center fixed no-repeat;
+    background-size: cover;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#page-content {
+    background-color: #fff;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 0 15px 4px #000;
+    margin-bottom: 12px;
+    min-height: 600px;
+}
+
+#page-logo {
+    width: 260px;
+    z-index: 100;
+    margin: 10px 0 0 10px;
+}
+
+.header-icons {
+    display: none;
+    list-style-type: none;
+    margin-top: 12px;
+
+    li {
+        float: left;
+
+        a {
+            height: 42px;
+            width: 42px;
+            overflow: hidden;
+            display: block;
+        }
+    }
+
+    .esp {
+        background: url(../Assets/Images/icon-esp.png) no-repeat;
+
+        &:hover {
+                background-position: bottom left;
+        }
+    }
+
+    .social {
+        background-image: url(../Assets/Images/icon-social.png);
+        
+        &:hover {
+            background-position-y: -42px;
+        }
+    }
+
+    .twitter {
+        background-position: -42px 0;
+    }
+
+    .facebook {
+        background-position: -84px 0;
+    }
+
+    .home {
+        background-position: -252px 0;
+    }
+}
+
+.content-footer {
+    font-size: 11px;
+
+    a {
+        color: #5ABA47;
+
+        &:hover {
+            color: #ff9517;
+        }
+    }
+
+    .footer-menu {
+        list-style-type: none;
+        float: right;
+
+        li {
+            float: left;
+            margin-left: 12px;
+        }
+    }
+}
+
+#page-footer {
+    padding: 24px 0;
+
+    img {
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+// 4. Responsive Overrides
+// -------------------------
+
+// default styling should be for phones 767px or less
+
+// Small devices (tablets, 768px and up)
+@media (min-width: @screen-sm-min) {
+
+    #page-logo {
+        width: 414px;
+        height: 165px;
+        z-index: 100;
+    }
+    
+    .header-icons {
+        display: block;
+        float: right;
+    }
+}
+
+// Medium devices (desktops, 992px and up)
+@media (min-width: @screen-md-min) {
+    .container {
+        width: 1000px;
+    }
+}
+
+// Large devices (large desktops, 1200px and up)
+@media (min-width: @screen-lg-min) {
+}
+
+
+@import "_css-overrides.less";

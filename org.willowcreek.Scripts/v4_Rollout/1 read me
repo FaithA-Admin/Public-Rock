@@ -1,0 +1,11 @@
+https://github.com/WillowCreekCC/Rock_3.2/tree/develop-protection-redesign/org.willowcreek%20Database
+
+dashboard sql
+
+
+one of the migrations crashes check numbers spreadsheet:
+
+Remove Migration Error:	
+Drop Index IX_ConfidenceScore
+
+#2 & 10 only required for the first upgrade past v4

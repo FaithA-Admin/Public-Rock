@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="LogoutButton.ascx.cs" Inherits="LogoutButtonControl" %>
+<asp:LinkButton ID="lbLogout" runat="server" OnClick="lbLogout_Click" CausesValidation="false" Text="Logout"></asp:LinkButton>

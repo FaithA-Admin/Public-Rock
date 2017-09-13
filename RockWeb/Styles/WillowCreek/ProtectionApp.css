@@ -1,0 +1,68 @@
+﻿/*  01/08/2015 - FormEntry.ascx
+    JGS - provides iconic representation of a valid form input
+*/
+#applicant-validation-message,
+#reference-validation-message {
+    border-radius: 4px;
+    background-color: #DB6B6B;
+    color: #fff;
+    display: block;
+    margin: 3px;
+    padding: 3px;
+}
+
+    #applicant-validation-message,
+    #reference-validation-message .in-valid {
+        color: #fff;
+        font-size: 15pt;
+        vertical-align: top;
+    }
+
+    #applicant-validation-message,
+    #reference-validation-message > span {
+        display: inline-block;
+        width: 95%;
+    }
+
+span.validated {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 4px;
+    position: absolute;
+    top: 0px;
+    text-align: left;
+    width:200px;
+}
+
+    span.validated .valid {
+        color: #508F53;
+        font-size: 15pt;
+    }
+
+    span.validated .in-valid {
+        color: #8F5050;
+        font-size: 15pt;
+    }
+.counter {
+    padding:0px 4px;
+    font: normal 8pt verdana;
+    font-style: italic;
+}
+.hint {
+    padding:0px 4px;
+    font: bold 7pt verdana;
+    font-style: italic;
+}
+.indented-block {
+    margin-left:20px
+}
+.notation-simple {
+    background: #f3bf2d;
+    border-radius: 4px;
+    padding:4px 15px;
+    font: bold 7pt verdana;
+    font-style: italic;
+}
+label.radiolabel { font-weight: normal;
+                   margin-right: 1em;
+}
